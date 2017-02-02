@@ -1,8 +1,12 @@
 [package]
 name = "authz"
+description = "Permission-based authorization library"
 version = "0.1.0"
 authors = ["Darin Gordon <dkcdkg@gmail.com>"]
 build = "build.rs"
+license = "Apache-2.0"
+homepage = "https://github.com/Dowwie/rust-authz"
+readme = "README.md"
 
 [features]
 default = ["serde_codegen"]
