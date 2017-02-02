@@ -1,0 +1,14 @@
+use std::collections::HashSet;
+use std::hash::{BuildHasherDefault};
+use seahash::SeaHasher;
+
+type SeaHashSet<K> = HashSet<K, BuildHasherDefault<SeaHasher>>;
+
+
+#[derive(Debug)]
+#[derive(Serialize, Deserialize)]
+pub struct Permission {
+    pub domain: String,
+    pub actions: SeaHashSet<String>,
+    pub targets: SeaHashSet<String>
+}
