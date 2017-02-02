@@ -1,11 +1,7 @@
 extern crate serde_json;
 
 use json_types::Permission;
-use std::slice;
-use std::ffi::CStr;
-use std::panic;
 use std::str;
-use libc::{size_t, c_char, c_int};
 use std::collections::HashSet;
 use std::hash::BuildHasherDefault;
 use seahash::SeaHasher;
