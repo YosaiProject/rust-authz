@@ -2,6 +2,7 @@ extern crate serde_json;
 
 use json_types::Permission;
 use std::str;
+use std::error::Error;
 use std::collections::HashSet;
 
 static PART_DELIMETER: &'static str = ":";
@@ -76,7 +77,7 @@ impl<'a> Permission {
     }
 }
 
-pub fn _is_permitted_from_str<'a, I>(required_perm: &str, assigned_perms: I) -> i32
+pub fn is_permitted_from_str<'a, I>(required_perm: &str, assigned_perms: I) -> i32
     where I: IntoIterator<Item = &'a str>
 {
     let required_permission = Permission::new(&required_perm);
@@ -90,7 +91,7 @@ pub fn _is_permitted_from_str<'a, I>(required_perm: &str, assigned_perms: I) -> 
     return 0;
 }
 
-pub fn _is_permitted_from_perm(required_perm: &str, assigned_perms: Vec<Permission>) -> i32 {
+pub fn is_permitted_from_perm(required_perm: &str, assigned_perms: Vec<Permission>) -> i32 {
     let required_permission = Permission::new(required_perm);
 
     for assigned in assigned_perms {
@@ -101,12 +102,16 @@ pub fn _is_permitted_from_perm(required_perm: &str, assigned_perms: Vec<Permissi
     return 0;
 }
 
-
+pub fn perms_from_buffer(serialized_perms: &[u8]) -> Result<Vec<Permission>, Box<Error>> {
+    let result = try!(serde_json::from_slice(serialized_perms));
+    Ok(result)
+}
 
 
 #[cfg(test)]
 mod test {
-    use authz::{Permission, _is_permitted_from_str, _is_permitted_from_perm};
+    extern crate serde_json;
+    use authz::{Permission, is_permitted_from_str, is_permitted_from_perm, perms_from_buffer};
     use std::collections::HashSet;
 
     #[test]
@@ -198,18 +203,26 @@ mod test {
     }
 
     #[test]
-    fn test_internal_is_permitted_from_str(){
+    fn test_internalis_permitted_from_str(){
         let required: &str = "domain2:action4:target7";
         let assigned: Vec<&str> = vec!["domain1:action1", "domain2:action3,action4"];
-        assert_eq!(_is_permitted_from_str(required, assigned.into_iter()), 1);
+        assert_eq!(is_permitted_from_str(required, assigned.into_iter()), 1);
     }
 
     #[test]
-    fn test_is_permitted_from_perm() {
+    fn testis_permitted_from_perm() {
         let required: &str = "domain2:action4:target7";
         let assigned: Vec<Permission> = vec![Permission::new("domain1:action1"),
                                              Permission::new("domain2:action3,action4")];
-        assert_eq!(_is_permitted_from_perm(required, assigned), 1);
+        assert_eq!(is_permitted_from_perm(required, assigned), 1);
     }
 
+    #[test]
+    fn test_perms_from_buffer() {
+        let permissions: Vec<Permission> = vec![Permission::new("domain1:action1"),
+                                                Permission::new("domain2:action3,action4")];
+        let serialized = serde_json::to_vec(permissions).unwrap();
+        let result: Vec<Permission> = perms_from_buffer(serialized);
+        assert_eq!(result, permissions);
+    }
 }

@@ -9,5 +9,4 @@ extern crate serde_json;
 
 pub mod json_types;
 pub mod authz;
-pub use authz::_is_permitted_from_str;
-pub use authz::_is_permitted_from_perm;
+pub use authz::{is_permitted_from_str, is_permitted_from_perm, perms_from_buffer};
