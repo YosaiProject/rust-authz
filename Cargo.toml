@@ -1,7 +1,7 @@
 [package]
 name = "authz"
 description = "Permission-based authorization library"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Darin Gordon <dkcdkg@gmail.com>"]
 build = "build.rs"
 license = "Apache-2.0"
