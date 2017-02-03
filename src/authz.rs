@@ -107,7 +107,6 @@ pub fn perms_from_buffer(serialized_perms: &[u8]) -> Result<Vec<Permission>, Box
     Ok(result)
 }
 
-
 #[cfg(test)]
 mod test {
     extern crate serde_json;
@@ -210,7 +209,7 @@ mod test {
     }
 
     #[test]
-    fn testis_permitted_from_perm() {
+    fn test_is_permitted_from_perm() {
         let required: &str = "domain2:action4:target7";
         let assigned: Vec<Permission> = vec![Permission::new("domain1:action1"),
                                              Permission::new("domain2:action3,action4")];
@@ -221,8 +220,8 @@ mod test {
     fn test_perms_from_buffer() {
         let permissions: Vec<Permission> = vec![Permission::new("domain1:action1"),
                                                 Permission::new("domain2:action3,action4")];
-        let serialized = serde_json::to_vec(permissions).unwrap();
-        let result: Vec<Permission> = perms_from_buffer(serialized);
+        let serialized = serde_json::to_string(&permissions).unwrap();
+        let result: Vec<Permission> = perms_from_buffer(serialized.as_bytes()).unwrap();
         assert_eq!(result, permissions);
     }
 }

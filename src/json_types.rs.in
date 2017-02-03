@@ -1,8 +1,7 @@
 use std::collections::HashSet;
 
 
-#[derive(Debug)]
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Permission {
     pub domain: String,
     pub actions: HashSet<String>,
