@@ -9,9 +9,9 @@ static SUBPART_DELIMETER: &'static str = ",";
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Permission {
-    pub domain: String,
-    pub actions: HashSet<String>,
-    pub targets: HashSet<String>
+    domain: String,
+    actions: HashSet<String>,
+    targets: HashSet<String>
 }
 
 impl<'a> Permission {
