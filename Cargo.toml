@@ -10,20 +10,21 @@ readme = "README.md"
 
 [features]
 default = ["serde_codegen"]
-nightly = ["serde_derive"]
+
 
 [build-dependencies]
-serde_codegen = { version = "^0.8", optional = true }
+serde_codegen = { version = "^0.9", optional = true }
+
 
 [dependencies]
-serde = "^0.8"
-serde_derive = { version = "^0.8", optional = true }
-serde_json = "^0.8"
-libc = "0.2"
-seahash = "3.0.5"
+serde = "^0.9.5"
+serde_derive = { version = "^0.9.5", optional = true }
+serde_json = "^0.9.4"
+
 
 [dev-dependencies]
 bencher = "0.1.2"
+
 
 [lib]
 crate-type = ["cdylib", "rlib"]

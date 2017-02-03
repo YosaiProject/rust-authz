@@ -3,10 +3,6 @@ extern crate serde_json;
 use json_types::Permission;
 use std::str;
 use std::collections::HashSet;
-use std::hash::BuildHasherDefault;
-use seahash::SeaHasher;
-
-type SeaHashSet<K> = HashSet<K, BuildHasherDefault<SeaHasher>>;
 
 static PART_DELIMETER: &'static str = ":";
 static SUBPART_DELIMETER: &'static str = ",";
@@ -23,15 +19,15 @@ impl<'a> Permission {
         perm
     }
 
-    fn part_from_str(s: Option<&str>) -> SeaHashSet<String> {
+    fn part_from_str(s: Option<&str>) -> HashSet<String> {
         match s {
             Some("") | None => {
-                let mut set = SeaHashSet::default();
+                let mut set = HashSet::new();
                 set.insert(String::from("*"));
                 set
             }
             Some(s) => {
-                let mut set = SeaHashSet::default();
+                let mut set = HashSet::new();
                 for rule in s.split(SUBPART_DELIMETER).map(str::trim) {
                     set.insert(String::from(rule));
                 }
@@ -40,7 +36,7 @@ impl<'a> Permission {
         }
     }
 
-    fn init_parts(wildcard_perm: &'a str) -> (String, SeaHashSet<String>, SeaHashSet<String>) {
+    fn init_parts(wildcard_perm: &'a str) -> (String, HashSet<String>, HashSet<String>) {
         let mut iter = wildcard_perm.split(PART_DELIMETER).map(str::trim);
 
         let domain = match iter.next() {
@@ -112,10 +108,6 @@ pub fn _is_permitted_from_perm(required_perm: &str, assigned_perms: Vec<Permissi
 mod test {
     use authz::{Permission, _is_permitted_from_str, _is_permitted_from_perm};
     use std::collections::HashSet;
-    use std::hash::BuildHasherDefault;
-    use seahash::SeaHasher;
-
-    type SeaHashSet<K> = HashSet<K, BuildHasherDefault<SeaHasher>>;
 
     #[test]
     fn test_new_permission() {
@@ -136,9 +128,9 @@ mod test {
         for test in tests.iter() {
             let perm: Permission = Permission::new(test.wildcard_perm);
 
-            let expected_actions: SeaHashSet<String> =
+            let expected_actions: HashSet<String> =
                 test.actions.iter().map(|x| x.to_string()).collect();
-            let expected_targets: SeaHashSet<String> =
+            let expected_targets: HashSet<String> =
                 test.targets.iter().map(|x| x.to_string()).collect();
 
             assert_eq!(perm.domain == test.domain, true);
@@ -154,8 +146,8 @@ mod test {
                          (Some("action1, action2, action3"), vec!["action1", "action2", "action3"]),
                          (Some("incorrect format"), vec!["incorrect format"])];
         for &(ref input, ref expected) in tests.iter(){
-            let expected_result: SeaHashSet<String> = expected.iter().map(|x| x.to_string()).collect();
-            let result: SeaHashSet<String> = Permission::part_from_str(*input);
+            let expected_result: HashSet<String> = expected.iter().map(|x| x.to_string()).collect();
+            let result: HashSet<String> = Permission::part_from_str(*input);
             assert_eq!(result, expected_result);
         }
     }
