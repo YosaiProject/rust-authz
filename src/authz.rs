@@ -36,7 +36,7 @@ impl<'a> Permission {
         }
     }
 
-    fn init_parts(wildcard_perm: &'a str) -> (String, HashSet<String>, HashSet<String>) {
+    fn init_parts(wildcard_perm: &str) -> (String, HashSet<String>, HashSet<String>) {
         let mut iter = wildcard_perm.split(PART_DELIMETER).map(str::trim);
 
         let domain = match iter.next() {
