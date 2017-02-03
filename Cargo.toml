@@ -3,22 +3,14 @@ name = "authz"
 description = "Permission-based authorization library"
 version = "0.1.2"
 authors = ["Darin Gordon <dkcdkg@gmail.com>"]
-build = "build.rs"
 license = "Apache-2.0"
 homepage = "https://github.com/Dowwie/rust-authz"
 readme = "README.md"
 
-[features]
-default = ["serde_codegen"]
-
-
-[build-dependencies]
-serde_codegen = { version = "^0.9", optional = true }
-
 
 [dependencies]
 serde = "^0.9.5"
-serde_derive = { version = "^0.9.5", optional = true }
+serde_derive = "^0.9.5"
 serde_json = "^0.9.4"
 
 

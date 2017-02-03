@@ -1,6 +1,5 @@
 extern crate serde_json;
 
-use json_types::Permission;
 use std::str;
 use std::error::Error;
 use std::collections::HashSet;
@@ -8,6 +7,12 @@ use std::collections::HashSet;
 static PART_DELIMETER: &'static str = ":";
 static SUBPART_DELIMETER: &'static str = ",";
 
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
+pub struct Permission {
+    pub domain: String,
+    pub actions: HashSet<String>,
+    pub targets: HashSet<String>
+}
 
 impl<'a> Permission {
     pub fn new(wildcard_perm: &str) -> Permission {
