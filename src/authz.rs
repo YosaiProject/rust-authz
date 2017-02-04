@@ -1,3 +1,4 @@
+extern crate serde;
 extern crate serde_json;
 
 use std::str;
@@ -9,9 +10,23 @@ static SUBPART_DELIMETER: &'static str = ",";
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Permission {
+
+    #[serde(default = "default_part")]
     domain: String,
+
+    #[serde(default = "default_hash_part")]
     actions: HashSet<String>,
+
+    #[serde(default = "default_hash_part")]
     targets: HashSet<String>
+}
+
+fn default_part() -> String {
+    "*".to_string()
+}
+
+fn default_hash_part() -> HashSet<String> {
+    ["*"].into_iter().map(|s| s.to_string()).collect()
 }
 
 impl<'a> Permission {
