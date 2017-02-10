@@ -41,20 +41,18 @@ impl<'a> Permission {
     }
 
     fn part_from_str(s: Option<&str>) -> HashSet<String> {
+        let mut set = HashSet::new();
         match s {
             Some("") | None => {
-                let mut set = HashSet::new();
                 set.insert(String::from("*"));
-                set
             }
             Some(s) => {
-                let mut set = HashSet::new();
                 for rule in s.split(SUBPART_DELIMETER).map(str::trim) {
                     set.insert(String::from(rule));
                 }
-                set
             }
         }
+        set
     }
 
     fn init_parts(wildcard_perm: &str) -> (String, HashSet<String>, HashSet<String>) {
